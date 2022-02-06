@@ -1,0 +1,21 @@
+{
+  "name": "gardim-collector",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "start": "tsc; node bin/app.js",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.15",
+    "typescript": "^4.5.5"
+  },
+  "dependencies": {
+    "mqtt": "^4.2",
+    "mysql2": "^2.3.3",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.2.41"
+  }
+}
