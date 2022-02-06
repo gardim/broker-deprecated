@@ -156,6 +156,7 @@ dist
 # comment the following lines
 !.yarn/cache
 .vscode/
+./bin/
 
 # and uncomment the following lines
 # .pnp.*
