@@ -2,17 +2,21 @@ import { connect } from "mqtt";
 import "reflect-metadata";
 import HandleMessage from "./application/MessageAppService.js";
 import { MQTT_URL } from "./infrastructure/Config.js";
+import { socket } from "./infrastructure/Socket.js";
 
-const client = connect(MQTT_URL, {
+//---------------------------------------------------------
+const mqttClient = connect(MQTT_URL, {
   clientId: `mqtt_${Math.random().toString(16).slice(3)}`,
+  protocol: "ws",
+  port: 8080,
 });
 
-const topic = "#";
+const topic = "gardim/esp32/000000/#";
 
-client.on("connect", function () {
-  console.log("Connected");
+mqttClient.on("connect", function () {
+  console.log("Connected to MQTT");
 
-  client.subscribe(topic, function (err) {
+  mqttClient.subscribe(topic, function (err) {
     if (!err) {
       console.log(`Subscribed to ${topic}`);
     } else {
@@ -21,4 +25,5 @@ client.on("connect", function () {
   });
 });
 
-client.on("message", HandleMessage);
+mqttClient.on("message", HandleMessage(socket));
+//--------------------------------------------------------
