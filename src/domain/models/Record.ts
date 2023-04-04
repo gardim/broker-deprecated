@@ -9,7 +9,11 @@ export class Record {
   @Column()
   code: string;
   @Column()
-  humidity: number;
+  unit: string;
+  @Column("float")
+  parsed: number;
+  @Column()
+  raw: number;
   @CreateDateColumn({
     type: "timestamp",
     default: () => "CURRENT_TIMESTAMP(6)",

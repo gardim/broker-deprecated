@@ -1,14 +1,34 @@
+import { Server } from "socket.io";
+import { DefaultEventsMap } from "socket.io/dist/typed-events.js";
 import RecordRepository from "../infrastructure/RecordRepository.js";
-import { RecordFromMessage } from "../services/MessageService.js";
+import { GetConversionStrategyService } from "../services/GetConversionStrategyService.js";
+import { RecordFromMessageService } from "../services/RecordFromMessageService.js";
 
-const HandleMessage = async (topic: string, message: Buffer) => {
-  const content = message.toString();
+const HandleMessage = (
+  socket: Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>
+) => {
+  return async (topic: string, message: Buffer) => {
+    const content = message.toString();
 
-  const record = RecordFromMessage({ topic, message: content });
+    const conversionStrategy = GetConversionStrategyService(topic);
 
-  await RecordRepository.save(record);
+    const result = conversionStrategy(content);
 
-  console.log(`${topic} ${content} SAVED!`);
+    const record = RecordFromMessageService({
+      topic,
+      raw: content,
+      parsed: result.parsed,
+      unit: result.unit,
+    });
+
+    await RecordRepository.save(record);
+
+    socket.emit(topic, record);
+
+    console.log(
+      `Topic: ${topic} Raw: ${content} ${result.unit}: ${result.parsed} persisted`
+    );
+  };
 };
 
 export default HandleMessage;
