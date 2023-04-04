@@ -23,7 +23,7 @@ const HandleMessage = (
 
     await RecordRepository.save(record);
 
-    socket.emit(topic, JSON.stringify(record));
+    socket.emit(topic, record);
 
     console.log(
       `Topic: ${topic} Raw: ${content} ${result.unit}: ${result.parsed} persisted`

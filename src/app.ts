@@ -2,7 +2,7 @@ import { connect } from "mqtt";
 import "reflect-metadata";
 import HandleMessage from "./application/MessageAppService.js";
 import { MQTT_URL } from "./infrastructure/Config.js";
-import { socket } from "./infrastructure/Socket.js";
+import { httpSocket, httpsSocket } from "./infrastructure/Socket.js";
 
 //---------------------------------------------------------
 const mqttClient = connect(MQTT_URL, {
@@ -25,5 +25,5 @@ mqttClient.on("connect", function () {
   });
 });
 
-mqttClient.on("message", HandleMessage(socket));
+mqttClient.on("message", HandleMessage(httpsSocket));
 //--------------------------------------------------------
